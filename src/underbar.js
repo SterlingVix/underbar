@@ -50,7 +50,10 @@ var _ = {};
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
     if (Array.isArray(collection)) { // enter here if collection === an array
-      collection.forEach(iterator);
+        // collection.forEach(iterator);
+      for(var i = 0; i < collection.length; i++) {
+        iterator(collection[i], i, collection);
+      } // end for
     } else { // else this is a non-array object
       var objKeys = Object.keys(collection);
       //for(var objKeys in collection) {
@@ -129,7 +132,6 @@ var _ = {};
     var result = [];
 
     _.each(collection, function(index, item) {
-      // result.push(iterator.call(item, index));
       result.push(iterator.call(item, index));
     }); // end each
 
@@ -157,19 +159,22 @@ var _ = {};
   // Calls the method named by functionOrKey (methodName) on each value in the collection.
   // Note: you will nead to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
-    var args = [];
-    args = slice.call(arguments, arguments.length); // make 'args' an array with all the arguments of the 
+    var args = Array.prototype.slice.call(arguments);
+    var numArgs = arguments.length;
 
-    
+    var isAFunction = ( eval(typeof functionOrKey === 'function')); // bool
 
-_.invoke(list, methodName, *arguments) 
-Calls the method named by methodName on each value in the list. 
-Any extra arguments passed to invoke will be forwarded on to 
-the method invocation.
+    if (isAFunction) {
+      return _.map(collection, function(value) {
+        return functionOrKey.apply(value, args); // returns the 'functionOrKey' function call to be used as arg2 in _.map()
+      });
+    } else { // is not a function
+      return _.map(collection, function(value) {
+        return value[functionOrKey].apply(value, args);
+      });
+    } // end else (is not a function)
+  }; // end invoke
 
-
-
-  };
 
   // Reduces an array or object to a single value by repetitively calling
   // iterator(previousValue, item) for each item. previousValue should be
@@ -185,7 +190,21 @@ the method invocation.
   //     return total + number;
   //   }, 0); // should be 6
   _.reduce = function(collection, iterator, accumulator) {
-  };
+    var previousValue = 0;
+    if (accumulator === undefined) previousValue = collection[0];
+    else previousValue = accumulator;
+
+    _.each(collection, function(item, index, list) {
+      var aString = "PV1: " + previousValue;
+
+      previousValue = iterator.call(this, previousValue, item);
+
+      aString += "\nPV2: " + previousValue;
+      alert(aString);
+    }); // end each
+
+      return previousValue;
+    };
 
   // Determine if the array or object contains a given value (using `===`).
   _.contains = function(collection, target) {
