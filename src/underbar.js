@@ -195,12 +195,7 @@ var _ = {};
     else previousValue = accumulator;
 
     _.each(collection, function(item, index, list) {
-      var aString = "PV1: " + previousValue;
-
       previousValue = iterator.call(this, previousValue, item);
-
-      aString += "\nPV2: " + previousValue;
-      alert(aString);
     }); // end each
 
       return previousValue;
