@@ -4,6 +4,19 @@ var _ = {};
 
 (function() {
 
+  // PROGRAMMER FUNCTIONS for development / debugging / etc.
+  var isTruthy = function(input) {
+    if(input) {
+      console.log("Truthy");
+      return true;
+    } else {
+      console.log("Falsy")};
+      return false;
+    };
+
+
+
+
   // Returns whatever value is passed as the argument. This function doesn't
   // seem very useful, but remember it--if a function needs to provide an
   // iterator when the user does not pass one in, this will be handy.
@@ -195,10 +208,11 @@ var _ = {};
     else previousValue = accumulator;
 
     _.each(collection, function(item, index, list) {
-      previousValue = iterator.call(this, previousValue, item);
+        previousValue = iterator(previousValue, item);
+        accumulator = previousValue;
     }); // end each
 
-      return previousValue;
+      return accumulator;
     };
 
   // Determine if the array or object contains a given value (using `===`).
@@ -217,11 +231,45 @@ var _ = {};
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+var result = true;
+
+    var result = _.reduce(collection, function(result, thisItem) {
+      if (!!result) {
+        if (typeof iterator !== 'function') {
+          result = thisItem;
+        } else {
+        result = iterator(thisItem); } // end else
+
+        return result;
+      } else {
+        result = false;
+        return result;
+      }
+    }, true);
+
+    result = !!result;
+    return result; // !! will typecast to identical Bool value!
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
+    var result = false;
+    if (typeof iterator !== 'function') {
+      iterator = _.identity;
+    }
+
+    var result = _.reduce(collection, function(result, thisItem) {
+      if (!result) {
+        result = iterator(thisItem);
+      } else {
+        result = true;
+      } // end else
+        return result;
+    }, false);
+
+    result = !!result;
+    return result; // !! will typecast to identical Bool value!
     // TIP: There's a very clever way to re-use every() here.
   };
 
@@ -369,3 +417,18 @@ var _ = {};
   };
 
 }).call(this);
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////// DEBUG FUNCTIONS /////////////////////////////////////
+
