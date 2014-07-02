@@ -293,11 +293,32 @@ var result = true;
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    var argsLen = arguments.length;
+    var args = Array.prototype.slice.call(arguments, 1);
+
+    _.each(args, function(source) { // ??? Not sure about 'source' value here, but this is that same old JavaScript spookiness that keeps confusing me.
+        for (var k in source) {
+          obj[k] = source[k];
+        } // end for (var k in source)
+    }); // end _.each
+
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    var args = Array.prototype.slice.call(arguments, 1);
+
+    _.each(args, function(source) {
+        for (var k in source) {
+          if (obj[k] === undefined) {
+            obj[k] = source[k];
+          } // end if (obj[k] is undefined)
+        } // end for (var k in source)
+    }); // end _.each
+
+    return obj;
   };
 
 
