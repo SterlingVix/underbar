@@ -395,6 +395,24 @@ var _ = {};
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    var arrayLen = array.length;
+    var result = new Array(arrayLen);
+
+    var getRand = function(n) {
+      var randResult = Math.floor(Math.random() * n);
+      return randResult;
+      //return randResult + 1;
+    };
+
+  	for (var i = 0; i < arrayLen; i++) { // Fisher-Yates shuffle: http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+      var numTry = getRand(i);
+      if (numTry !== i) {
+      	result[i] = result[numTry];
+      } // end if
+      result[numTry] = array[i];
+  	} // end for
+
+    return result;
   };
 
 
