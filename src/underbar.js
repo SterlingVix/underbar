@@ -353,27 +353,13 @@ var _ = {};
   // instead if possible.
   _.memoize = function(func) {
     var computedObjects = {};
-    //var result;
-    //var funcInput = _.identity;
-    
     return function(n) { // apprently this just pulls in "func". That IS func-y...
-      //var key = arguments;
-      //var keyN = n;
-      //key = (key[0]);
-      //var key = funcInput.apply(this, arguments);
       
       if (computedObjects[n] === undefined) {
-        //computedObjects[n] = func.apply(this, arguments);
         computedObjects[n] = func(n);
       }
       
       return computedObjects[n];
-    //       for (var prop in computedObjects) {
-    //         if (computedObjects.hasOwnProperty(prop)) {
-    //           console.log("" + prop + ":" + computedObjects[prop]);
-    //         }
-    //       };
-    
     }; // end return function
   }; // end memoize
 
@@ -385,18 +371,16 @@ var _ = {};
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
     var args = [];
-    args = arguments;
+    var argsLen = arguments.length;
+    
+    for (var i = 2; i < arguments.length; i++) {
+      args.push(arguments[i]);
+    }
 
-    //if (args.length > 2) {
-    args = (args.slice(2, args.length));
-    var argsString = args.join(', ');
-    //};
-    console.log("Args: " + args + ";   argsString: " + argsString);
-
-    //var delayFunc = window.setTimeout(func.apply(this, args),wait);
-    return setTimeout(function() {
-      return func.apply(this, args);
+    return window.setTimeout(function() {
+      return func.apply(null, args);
     }, wait);
+    
   };
 
 
